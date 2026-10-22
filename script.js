@@ -1,0 +1,8 @@
+const pages=[...document.querySelectorAll('.page')],bar=document.querySelector('#progress'),counter=document.querySelector('#counter');let n=0;
+function go(x){n=Math.max(0,Math.min(pages.length-1,x));pages.forEach((p,i)=>p.classList.toggle('active',i===n));bar.style.width=((n+1)/pages.length*100)+'%';counter.textContent=String(n+1).padStart(2,'0')+' / 08';burst();}
+document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>go(n+1));
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(n+1);if(e.key==='ArrowLeft')go(n-1)});
+let startX=0;document.addEventListener('touchstart',e=>startX=e.changedTouches[0].screenX,{passive:true});document.addEventListener('touchend',e=>{let dx=e.changedTouches[0].screenX-startX;if(Math.abs(dx)>60)go(n+(dx<0?1:-1))},{passive:true});
+function make(type){let x=document.createElement('div');x.className=type==='petal'?'petal':'heart';x.textContent=type==='petal'?['🌹','🌸','🌷','✨'][Math.floor(Math.random()*4)]:['❤️','💗','💕','💖','💘','✨'][Math.floor(Math.random()*6)];x.style.left=Math.random()*100+'vw';x.style.fontSize=(12+Math.random()*24)+'px';x.style.animationDuration=(5+Math.random()*7)+'s';document.body.appendChild(x);setTimeout(()=>x.remove(),14000)}
+setInterval(()=>make('heart'),550);setInterval(()=>make('petal'),1700);function burst(){for(let i=0;i<9;i++)setTimeout(()=>make('heart'),i*45)}
+const music=document.querySelector('#music');let audio;music.onclick=()=>{if(!audio)audio=new Audio('music/romantic.mp3');if(audio.paused){audio.play().then(()=>music.textContent='🔊').catch(()=>alert('Add your own music as music/romantic.mp3 first.'))}else{audio.pause();music.textContent='🎵'}};
